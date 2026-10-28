@@ -114,11 +114,119 @@
 
 
 
-
-
-
-
-
+;reduce — Acumulando valores
+;
+;A função reduce percorre uma coleção, aplicando uma função a cada elemento e atualizando um acumulador até produzir um resultado final.
+;
+;1. Sintaxe
+;(reduce função acumulador-inicial coleção)
+;
+;A função passada para reduce recebe dois argumentos, nesta ordem:
+;
+;Acumulador: resultado acumulado até o momento.
+;
+;Elemento atual: elemento da coleção que está sendo processado.
+;
+;2. Exemplo
+;
+;(defn somar
+;  [acumulador numero]
+;  (+ acumulador numero))
+;
+;(reduce somar 0 [10 20 30])
+;;; Resultado: 60
+;
+;O processamento acontece assim:
+;
+;Etapa
+;
+;Acumulador
+;
+;Elemento atual
+;
+;Novo acumulador
+;
+;Inicial
+;
+;0
+;
+;—
+;
+;0
+;
+;1
+;
+;0
+;
+;10
+;
+;10
+;
+;2
+;
+;10
+;
+;20
+;
+;30
+;
+;3
+;
+;30
+;
+;30
+;
+;60
+;
+;3. Usando reduce com mapas
+;
+;O acumulador também pode ser um mapa, permitindo atualizar várias informações durante o processamento.
+;
+;(defn acumular-produtividade
+;  [resultado atividade]
+;  (update resultado
+;          :total-minutos
+;          +
+;          (:minutos atividade)))
+;
+;(reduce acumular-produtividade
+;        {:total-minutos 0}
+;        [{:nome "Estudar Clojure" :minutos 120}
+;         {:nome "Academia" :minutos 60}])
+;
+;;; Resultado:
+;;; {:total-minutos 180}
+;
+;Nesse exemplo:
+;
+;resultado é o mapa acumulador.
+;
+;atividade é o elemento atual da coleção.
+;
+;(:minutos atividade) extrai os minutos da atividade.
+;
+;update soma esses minutos ao total acumulado.
+;
+;A função retorna o novo mapa, que será usado na próxima iteração.
+;
+;4. Atenção à ordem dos argumentos
+;
+;A função utilizada pelo reduce deve receber os argumentos na ordem esperada:
+;
+;(fn [acumulador elemento-atual]
+;  ...)
+;
+;Os nomes dos parâmetros são livres, mas suas posições precisam corresponder aos valores fornecidos pelo reduce.
+;
+;Se inverter os parâmetros, poderá tentar acessar uma chave inexistente ou realizar operações com valores incorretos, causando erros como NullPointerException.
+;
+;Regra para memorizar
+;
+;reduce recebe uma função, um acumulador inicial e uma coleção. A cada iteração, a função recebe o acumulador primeiro e o elemento atual depois, devendo retornar o novo acumulador.
+;
+;
+;
+;
 
 
 
