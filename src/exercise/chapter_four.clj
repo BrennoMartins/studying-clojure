@@ -288,43 +288,78 @@
 
 ;Exercício 5 — Painel de produtividade
 ;Dificuldade: ⭐⭐⭐⭐⭐
-;
 ;Este é o desafio final. Aqui você precisará combinar praticamente todos os conceitos importantes do capítulo.
-;
 ;Considere:
-;(def atividades
-;  [{:nome "Estudar Clojure" :categoria :estudo :minutos 120 :concluida true}
-;   {:nome "Academia" :categoria :saude :minutos 60 :concluida true}
-;   {:nome "Ler livro" :categoria :estudo :minutos 45 :concluida false}
-;   {:nome "Caminhada" :categoria :saude :minutos 30 :concluida true}
-;   {:nome "Estudar inglês" :categoria :estudo :minutos 90 :concluida true}
-;   {:nome "Jogar videogame" :categoria :lazer :minutos 120 :concluida true}
-;   {:nome "Yoga" :categoria :saude :minutos 40 :concluida false}
-;   {:nome "Estudar Datomic" :categoria :estudo :minutos 60 :concluida false}
-;   {:nome "Assistir série" :categoria :lazer :minutos 90 :concluida true}])
+(def atividades
+  [{:nome "Estudar Clojure" :categoria :estudo :minutos 120 :concluida true}
+   {:nome "Academia" :categoria :saude :minutos 60 :concluida true}
+   {:nome "Ler livro" :categoria :estudo :minutos 45 :concluida false}
+   {:nome "Caminhada" :categoria :saude :minutos 30 :concluida true}
+   {:nome "Estudar inglês" :categoria :estudo :minutos 90 :concluida true}
+   {:nome "Jogar videogame" :categoria :lazer :minutos 120 :concluida true}
+   {:nome "Yoga" :categoria :saude :minutos 40 :concluida false}
+   {:nome "Estudar Datomic" :categoria :estudo :minutos 60 :concluida false}
+   {:nome "Assistir série" :categoria :lazer :minutos 90 :concluida true}])
 ;
 ;Sua missão
 ;Crie uma função chamada gerar-painel que retorne um mapa contendo:
-;
-;1. :total-minutos-concluidos
-;
-;Soma dos minutos de todas as atividades concluídas.
-;
-;2. :total-por-categoria
-;
-;Mapa contendo o total de minutos de atividades concluídas para cada categoria.
-;
-;3. :ranking-estudos
-;
-;Vetor com as três atividades da categoria :estudo com maior duração, independentemente de estarem concluídas ou não.
-;
-;Cada elemento deve conter somente :nome e :minutos.
-;
-;4. :atividades-pendentes
-;
-;Vetor com as atividades não concluídas, ordenadas pela duração decrescente.
-;
-;Cada elemento deve conter somente :nome, :categoria e :minutos.
+;1. :total-minutos-concluidos -> Soma dos minutos de todas as atividades concluídas.
+;2. :total-por-categoria  -> Mapa contendo o total de minutos de atividades concluídas para cada categoria.
+;3. :ranking-estudos -> Vetor com as três atividades da categoria :estudo com maior duração, independentemente de estarem concluídas ou não.  Cada elemento deve conter somente :nome e :minutos.
+;4. :atividades-pendentes -> Vetor com as atividades não concluídas, ordenadas pela duração decrescente. Cada elemento deve conter somente :nome, :categoria e :minutos.
+
+(defn esta-concluido?
+  [atividade]
+  (:concluida atividade))
+
+(defn total-conluido
+  [atividades]
+  (->> atividades
+       (filter esta-concluido?)
+       (map :minutos)
+       (apply + 0)))
+
+(defn somar-por-categoria
+  [resultado atividade]
+  (update resultado (:categoria atividade) (fnil + 0) (:minutos atividade)))
+
+(defn total-por-categoria
+  [atividades]
+  (reduce somar-por-categoria {} atividades))
+
+(defn listar-por-categoria
+  [categoria atividade]
+  (= (:categoria atividade) categoria))
+
+(def categoria-estudo?
+  (partial listar-por-categoria :estudo))
+
+(defn ranking-estudos
+  [atividades]
+  (->> atividades
+       (filter categoria-estudo?)
+       (sort-by :minutos >)
+       (take 3)
+       (map #(select-keys % [:nome :minutos]))
+       (into [])))
+
+(defn atividades-pendentes
+  [atividades]
+  (->> atividades
+       (filter (complement esta-concluido?))
+       (sort-by :minutos >)
+       (map #(select-keys % [:nome :categoria :minutos]))
+       (into [])))
+
+(defn gerar-painel
+  [atividades]
+  {:total-minutos-concluidos (total-conluido atividades)
+   :total-por-categoria      (total-por-categoria atividades)
+   :ranking-estudos          (ranking-estudos atividades)
+   :atividades-pendentes     (atividades-pendentes atividades)})
+
+(gerar-painel atividades)
+
 ;Regras
 ;- Utilize filter, map, reduce, sort-by, take e into.
 ;- Utilize complement para identificar atividades não concluídas.
@@ -332,5 +367,4 @@
 ;- Utilize partial para criar pelo menos uma função auxiliar reutilizável.
 ;- Evite loop e recur.
 ;Atenção: o maior tempo entre as atividades deverá ser calculado usando apply, mas você precisará decidir como utilizar esse resultado no painel. Não é necessário adicionar uma chave extra ao mapa final; você pode usar o resultado para validar o ranking ou incorporá-lo a uma lógica auxiliar.
-;
 ;Esse exercício é propositalmente mais aberto. Existem diferentes maneiras corretas de organizar a solução.
