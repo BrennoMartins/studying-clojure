@@ -21,56 +21,54 @@
 ;(+ 10 20)
 ;
 ;Reader
-;
 ;Lê e transforma o texto em estruturas de dados
-;
 ;Estrutura de dados
-;
 ;Lista: +, 10, 20
-;
+
 ;Evaluator
-;
 ;Avalia a expressão e determina o que executar
-;
 ;Resultado
 ;30
-;
-;
+
 ;Essas duas etapas são fundamentais:
-;
 ;Reader: transforma o texto escrito em estruturas de dados Clojure.
-;
 ;Evaluator: avalia essas estruturas e produz resultados.
-;
+
 ;Uma observação: esse é um modelo conceitual simplificado. O ambiente de execução possui outras etapas internas, mas essa divisão é suficiente para começarmos.
+
 ;3. Vamos comparar com Java
 ;Considere:
 ;int resultado = 10 + 20;
-;
-;
 ;O compilador Java analisa o código, constrói uma representação interna e gera bytecode.
-;
+
 ;No Clojure, o processo começa com o Reader, que transforma o texto em estruturas de dados, e depois o avaliador trabalha com essas estruturas.
-;
 ;A grande diferença que queremos explorar é que, em Clojure, podemos manipular representações do próprio código como dados.
-;
 ;Isso abre possibilidades que vamos explorar com macros.
-;
+
+
 ;4. Primeiro experimento no REPL
 ;Quero que você execute estas expressões no seu REPL:
-;
+
 ;Experimento A
-;(+ 10 20)
-;
-;
+(+ 10 20)
+
 ;Experimento B
-;'( + 10 20)
-;
-;
+'( + 10 20)
+
 ;Experimento C
-;(list + 10 20)
-;
-;
+(list + 10 20)
+
 ;Observe que os três exemplos parecem semelhantes, mas têm comportamentos diferentes.
-;
 ;Uma pequena dica: o apóstrofo (') tem um papel muito importante no Clojure. Ele impede que uma expressão seja avaliada normalmente.
+;Podemos comparar:
+;Código	Comportamento	Resultado
+;(+ 10 20)	Avalia a expressão	30
+;'(+ 10 20)	Preserva a expressão como dado	Lista (+ 10 20)
+
+
+
+;Um detalhe importante: eval
+;O eval recebe uma estrutura de dados que representa código e solicita ao Clojure que a avalie.
+;Isso significa que podemos construir código dinamicamente e depois avaliá-lo.
+;É uma ideia fundamental para entender metaprogramação e macros.
+(eval '(+ 10 20))
