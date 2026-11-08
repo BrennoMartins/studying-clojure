@@ -6,16 +6,15 @@
 
 ;Isso significa que uma expressão como:
 ;(+ 10 20)
-;
+
 ;pode ser entendida como uma lista contendo três elementos:
 ;+
 ;10
 ;20
 
-;
 ;O primeiro elemento representa a operação, e os demais são seus argumentos.
-;
 ;Essa característica é uma das bases do poder das macros, que estudaremos mais adiante.
+
 ;2. O caminho entre escrever e executar código
 ;Quando você escreve uma expressão no Clojure, existem duas etapas fundamentais:
 ;Código-fonte
