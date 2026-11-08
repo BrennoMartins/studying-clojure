@@ -32,6 +32,8 @@
   [tempos]
   (take-while #(< % 35)  tempos))
 
+(habitos-ate-limite tempos)
+
 (defn habitos-apos-limite
   [tempos]
   (drop-while #(< % 35)  tempos))
