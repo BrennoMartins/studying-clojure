@@ -72,3 +72,17 @@
 ;Isso significa que podemos construir código dinamicamente e depois avaliá-lo.
 ;É uma ideia fundamental para entender metaprogramação e macros.
 (eval '(+ 10 20))
+
+(def expressao '(+ 10 20))
+
+
+(eval expressao)
+;
+;Conceitos que estudamos:
+;Conceito	Aprendizado
+;Evaluation	Avaliação de expressões
+;Reader	Transforma texto em estruturas de dados
+;Evaluator	Avalia as estruturas
+;Quote (')	Preserva expressões como dados
+;list	Cria listas avaliando seus argumentos
+;eval	Avalia uma estrutura que representa código
