@@ -172,8 +172,8 @@
 
 ;E estes dados:
 (def cliente
-  {:nome "Ana"
-   :email "ana@email.com"})
+  {:nome ""
+   :email "anaemail.com"})
 
 ;Sua missão é criar uma macro com esta interface:
 
@@ -183,21 +183,31 @@
     resultado-acumulado
     (assoc resultado-acumulado campo "Valor Invalido")))
 
-(validar-dados :nome nome-valido? "" {})
+(defn processar-validacao [cliente validacoes]
+  (reduce
+    (fn [acumulador [chave valor]]
+      (validar-dados chave valor (get cliente chave) acumulador))
+    {}
+    validacoes))
 
+(defmacro if-valid [cliente validacao erros bloco-valido bloco-erros]
+  `(let [~erros (processar-validacao ~cliente ~validacao)]
+     (if (empty? ~erros)
+       ~bloco-valido
+       ~bloco-erros)))
+;
+;1. Avaliação dos argumentos
+;Você escreveu:
+;(processar-validacao cliente validacoes-cliente)
+;Como está dentro de syntax quote, esses símbolos serão qualificados pelo namespace da macro, em vez de serem substituídos pelos argumentos recebidos.
+;Precisamos usar unquote:
+;(processar-validacao ~cliente ~validacoes-cliente)
 
-
-;(defmacro if-valid [cliente validacoes erros bloco-valido bloco-erros]
-;
-;
-;
-;  )
-;
-;
-;
-;(if-valid cliente validacoes-cliente erros
-;          (println "Cliente válido!")
-;          (println "Erros encontrados:" erros))
+(if-valid cliente
+          validacoes-cliente
+          erros
+          (println "Cliente válido!")
+          (println "Erros encontrados:" erros))
 ;;
 ;
 ;A macro deverá:
